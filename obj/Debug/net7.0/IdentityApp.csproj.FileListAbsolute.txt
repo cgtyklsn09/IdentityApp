@@ -72,3 +72,4 @@ C:\Kalsan\Projeler\Udemy\aspnetcore\IdentityApp\bin\Debug\net7.0\Humanizer.dll
 C:\Kalsan\Projeler\Udemy\aspnetcore\IdentityApp\bin\Debug\net7.0\Microsoft.EntityFrameworkCore.Design.dll
 C:\Kalsan\Projeler\Udemy\aspnetcore\IdentityApp\bin\Debug\net7.0\Mono.TextTemplating.dll
 C:\Kalsan\Projeler\Udemy\aspnetcore\IdentityApp\bin\Debug\net7.0\System.CodeDom.dll
+C:\Kalsan\Projeler\Udemy\aspnetcore\IdentityApp\obj\Debug\net7.0\IdentityApp.sourcelink.json
