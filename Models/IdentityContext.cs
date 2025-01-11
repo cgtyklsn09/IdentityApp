@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace IdentityApp.Models
 {
-    public class IdentityContext : IdentityDbContext<IdentityUser>
+    public class IdentityContext : IdentityDbContext<AppUser, AppRole, string>
     {
         //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         //{
