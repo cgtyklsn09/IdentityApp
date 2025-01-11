@@ -9,7 +9,7 @@
             <th>Username</th>
             <th>Full name</th>
             <th>Email</th>
-            <th></th>
+            <th style="width:125px"></th>
         </tr>
     </thead>
     <tbody>
@@ -22,7 +22,10 @@
                  <td>@user.Email</td>
                 <td>
                     <a asp-action="Edit" asp-route-id="@user.Id" class="btn btn-primary btn-sm">Edit</a>
-                    <a href="" class="btn btn-danger btn-sm">Delete</a>
+                    <form asp-action="Delete" method="post" style="display: inline-block" onsubmit="return confirm('Are you sure to delete user?')">
+                        <input type="hidden" name="Id" value="@user.Id"/>
+                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                    </form>
                 </td>
             </tr>
         }
