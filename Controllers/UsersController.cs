@@ -46,5 +46,57 @@ namespace IdentityApp.Controllers
 
             return View(model);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Edit(string id)
+        {
+            if (string.IsNullOrEmpty(id))
+                return RedirectToAction("Index");
+
+            var user = await _userManager.FindByIdAsync(id);
+            if (user != null)
+            {
+                return View(new EditViewModel
+                {
+                    Id = user.Id,
+                    FullName = user.FullName,
+                    Username = user.UserName,
+                    Email = user.Email
+                });
+            }
+
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(string id, EditViewModel model)
+        {
+            if(id != model.Id)
+                return RedirectToAction("Index");
+
+            if (ModelState.IsValid)
+            {
+                var user = await _userManager.FindByIdAsync(model.Id);
+                if (user != null)
+                {
+                    user.Email = model.Email;
+                    user.FullName = model.FullName;
+                    user.UserName = model.Username;
+
+                    var result = await _userManager.UpdateAsync(user);
+
+                    if (result.Succeeded && !string.IsNullOrEmpty(model.OldPassword) && !string.IsNullOrEmpty(model.NewPassword))
+                        await _userManager.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);
+
+                    if (result.Succeeded)
+                        return RedirectToAction("Index");
+
+                    foreach (IdentityError error in result.Errors)
+                        ModelState.AddModelError("", error.Description);
+                }
+            }
+
+            return View(model);
+        }
     }
 }
