@@ -19,5 +19,7 @@ namespace IdentityApp.ViewModels
         [DataType(DataType.Password)]
         [Display(Name = "New Password")]
         public string? NewPassword { get; set; }
+
+        public IList<string>? SelectedRoles { get; set; }
     }
 }

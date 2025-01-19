@@ -2,15 +2,19 @@
 using IdentityApp.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace IdentityApp.Controllers
 {
     public class UsersController : Controller
     {
-        private UserManager<AppUser> _userManager;
-        public UsersController(UserManager<AppUser> userManager)
+        private readonly UserManager<AppUser> _userManager;
+        private readonly RoleManager<AppRole> _roleManager;
+
+        public UsersController(UserManager<AppUser> userManager, RoleManager<AppRole> roleManager)
         {
             _userManager = userManager;
+            _roleManager = roleManager;
         }
 
         public IActionResult Index()
@@ -56,12 +60,15 @@ namespace IdentityApp.Controllers
             var user = await _userManager.FindByIdAsync(id);
             if (user != null)
             {
+                ViewBag.Roles = await _roleManager.Roles.Select(r => r.Name).ToListAsync();
+
                 return View(new EditViewModel
                 {
                     Id = user.Id,
                     FullName = user.FullName,
                     Username = user.UserName,
-                    Email = user.Email
+                    Email = user.Email,
+                    SelectedRoles = await _userManager.GetRolesAsync(user)
                 });
             }
 
@@ -89,7 +96,16 @@ namespace IdentityApp.Controllers
                         await _userManager.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);
 
                     if (result.Succeeded)
+                    {
+                        IList<string> existingRoles = await _userManager.GetRolesAsync(user);
+                        if(existingRoles.Count > 0)
+                            await _userManager.RemoveFromRolesAsync(user, existingRoles);
+
+                        if (model.SelectedRoles != null)
+                            await _userManager.AddToRolesAsync(user, model.SelectedRoles);
+
                         return RedirectToAction("Index");
+                    }
 
                     foreach (IdentityError error in result.Errors)
                         ModelState.AddModelError("", error.Description);
