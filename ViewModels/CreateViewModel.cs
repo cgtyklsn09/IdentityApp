@@ -8,6 +8,7 @@ namespace IdentityApp.ViewModels
         public string Username { get; set; } = string.Empty;
 
         [Required]
+        [Display(Name = "Full name")]
         public string FullName { get; set; } = string.Empty;
 
         [EmailAddress]

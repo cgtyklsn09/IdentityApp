@@ -32,11 +32,11 @@ public class AccountController : Controller
             {
                 await _signInManager.SignOutAsync();
 
-                if (!await _userManager.IsEmailConfirmedAsync(user))
-                {
-                    ModelState.AddModelError("", "Please confirm your email.");
-                    return View(model);
-                }
+                //if (!await _userManager.IsEmailConfirmedAsync(user))
+                //{
+                //    ModelState.AddModelError("", "Please confirm your email.");
+                //    return View(model);
+                //}
 
                 var result = await _signInManager.PasswordSignInAsync(user, model.Password, model.RememberMe, true);
                 if(result.Succeeded)
@@ -120,5 +120,11 @@ public class AccountController : Controller
 
         TempData["message"] = "User info could not found.";
         return View();
+    }
+
+    public async Task<IActionResult> Logout()
+    {
+        await _signInManager.SignOutAsync();
+        return RedirectToAction("Login");
     }
 }
